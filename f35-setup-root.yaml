@@ -1,0 +1,53 @@
+---
+  - name: "Setup local Fedora 35 system (root)"
+    hosts: localhost
+    connection: local 
+    tasks:  
+
+    - name: Set hostname to FedoraBox
+      ansible.builtin.hostname:
+        name: FedoraBox
+        use: systemd
+
+    - name: Install rpm fusion repo 
+      dnf:
+        name: 
+            - 'https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-35.noarch.rpm'
+            - 'https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-35.noarch.rpm'
+        disable_gpg_check: yes
+        state: present
+
+    - name: Install packages 
+      dnf:
+        name: 
+            - neofetch 
+            - tilix
+            - gnome-tweaks
+            - fish 
+            - starship 
+            - powerline-fonts
+            - toolbox
+            - flatpak-builder
+            - the_silver_searcher
+            - bpytop
+        state: present
+        
+    - name: Install media codecs
+      dnf:
+        name: 
+            - gstreamer1-plugins-bad-* 
+            - gstreamer1-plugins-good-* 
+            - gstreamer1-plugins-base
+            - gstreamer1-plugin-openh264 
+            - gstreamer1-libav
+        exclude: gstreamer1-plugins-bad-free-devel
+        state: present
+        
+    - name: Remove unwanted packages 
+      dnf:
+        name: 
+            - PackageKit-command-not-found
+            - PackageKit-gstreamer-plugin
+        state: absent
+        
+
