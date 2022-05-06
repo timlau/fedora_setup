@@ -1,0 +1,98 @@
+---
+  - name: "Setup local Fedora system "
+    hosts: localhost
+    connection: local 
+    gather_facts: false
+
+    vars:
+      fedora_release: 36
+      fedora_hostname: FedoraBox
+
+
+    tasks:  
+      - block:
+        - name: Set hostname to FedoraBox
+          hostname:
+            name: "{{ fedora_hostname }}"
+            use: systemd
+
+        - name: Install rpm fusion repo 
+          become: true
+          dnf:
+            name: 
+                - 'https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ fedora_release }}.noarch.rpm'
+                - 'https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ fedora_release }}.noarch.rpm'
+            disable_gpg_check: yes
+            state: present
+
+        - name: Install packages 
+          dnf:
+            name: 
+                - neofetch 
+                - tilix
+                - gnome-tweaks
+                - fish 
+                - starship 
+                - powerline-fonts
+                - toolbox
+                - flatpak-builder
+                - the_silver_searcher
+                - bpytop
+            state: present
+            
+        - name: Install media codecs
+          dnf:
+            name: 
+                - gstreamer1-plugins-bad-* 
+                - gstreamer1-plugins-good-* 
+                - gstreamer1-plugins-base
+                - gstreamer1-plugin-openh264 
+                - gstreamer1-libav
+            exclude: gstreamer1-plugins-bad-free-devel
+            state: present
+            
+        - name: Remove unwanted packages 
+          dnf:
+            name: 
+                - PackageKit-command-not-found
+                - PackageKit-gstreamer-plugin
+            state: absent
+        tags: superuser
+        become: true
+
+      - block:
+        - name: Add the flathub repository remote to the user installation
+          flatpak_remote:
+            name: flathub
+            state: present
+            flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+            method: user
+
+        - name: Install flatpaks (flathub)
+          flatpak:
+            remote: flathub
+            method: user
+            state: present
+            name:
+              - net.cozic.joplin_desktop
+              - org.gnome.Extensions
+              - com.github.tchx84.Flatseal
+              - org.telegram.desktop
+              - org.inkscape.Inkscape
+              - org.shotcut.Shotcut
+              - org.gimp.GIMP
+              - org.audacityteam.Audacity
+              - com.spotify.Client
+              - de.haeckerfelix.Shortwave
+              - org.gnome.gitlab.somas.Apostrophe
+              - com.github.johnfactotum.Foliate
+
+
+        - name: Disable Gnome software download update
+          dconf:
+            key: "/org/gnome/software/download-updates"
+            value: "false"
+            state: present
+        tags: user
+        become: false
+

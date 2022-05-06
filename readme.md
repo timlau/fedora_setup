@@ -1,4 +1,4 @@
-# Setup Local Fedora Linux 35 using Ansible
+# Setup local Fedora Linux Workstation using Ansible Playbook
 
 ## Requirements
 
@@ -9,27 +9,30 @@ sudo dnf install ansible ansible-collection-community-general
 
 ## Setup system
 
-### System configuration
+Run the following to setup your system
+```
+ansible-playbook fedora-setup.yml --ask-become-pass
+```
+
+### Configurations in playbook
 
  * Set system Hostname
  * Add rpmfusion 
  * install some wanted packages
  * remove some unwanted packages
-
-
-```
-sudo ansible-playbook f35-setup-root.yaml
-```
-
-### User configuration
-
-
  * add flathub flatpak repo
- * add gnome-nightly flatpak repo
  * install flatpaks from flathub
- * install flatpaks from gnome-night
  * disable Gnome Software updates auto download
 
+### Modifications
+
+The `fedora-setup.yml` contains some variables to configure fedora release and hostname
+
+```YAML
+    vars:
+      fedora_release: 36
+      fedora_hostname: FedoraBox
+
 ```
-ansible-playbook f35-setup-user.yaml
-```
+
+
