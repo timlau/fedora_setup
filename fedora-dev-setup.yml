@@ -9,6 +9,15 @@
 
     tasks:  
       - block:
+        - name: Add repository for vs code
+          yum_repository:
+            name: vscode
+            file: vscode
+            description: Visual Studio Code
+            baseurl: https://packages.microsoft.com/yumrepos/vscode
+            gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+            gpgcheck: yes
+          tags: ['repo','vscode']
 
         - name: Install dev packages 
           dnf:
