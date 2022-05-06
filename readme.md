@@ -10,10 +10,17 @@ sudo dnf install ansible ansible-collection-community-general
 ## Setup system
 
 Run the following to setup your system
+
 ```
 ansible-playbook fedora-setup.yml --ask-become-pass
 ```
 
+For developer setup (git etc) use
+
+```
+ansible-playbook fedora-dev-setup.yml --ask-become-pass
+
+```
 ### Configurations in playbook
 
  * Set system Hostname
@@ -26,14 +33,7 @@ ansible-playbook fedora-setup.yml --ask-become-pass
 
 ### Modifications
 
-The `fedora-setup.yml` contains some variables to configure fedora release and hostname
-
-```YAML
-    vars:
-      fedora_release: 36
-      fedora_hostname: FedoraBox
-
-```
+The `vars/user_vars.yml` contains some variables to configure packages, flatpak and other variable settings.
 
 ### Use tags to limit action
 
