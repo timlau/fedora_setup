@@ -11,13 +11,14 @@ dnf_packages:
   - fish 
   - starship 
   - powerline-fonts
-  - toolbox
-  - flatpak-builder
   - the_silver_searcher
   - bpytop
+  - nextcloud-client
 
 dev_packages:
   - git
+  - toolbox
+  - flatpak-builder
 
 flatpaks:
   - net.cozic.joplin_desktop
