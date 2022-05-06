@@ -1,0 +1,45 @@
+---
+  - name: "Setup local Fedora system for development"
+    hosts: localhost
+    connection: local 
+    gather_facts: false
+
+    vars_files:
+    - vars/user_vars.yml
+
+    tasks:  
+      - block:
+
+        - name: Install dev packages 
+          dnf:
+            name: "{{ dev_packages }}"
+            state: present
+          tags: packages
+            
+        tags: superuser
+        become: true
+
+      - block:
+        - name: setup git user
+          git_config:
+            name: user.name
+            scope: global
+            value: "{{ GIT_USERNAME }}"
+          tags: git
+
+        - name: setup git email
+          git_config:
+            name: user.email
+            scope: global
+            value: "{{ GIT_EMAIL }}"
+          tags: git
+
+        - name: setup git default branch
+          git_config:
+            name: init.defaultbranch
+            scope: global
+            value: "main"
+          tags: git
+
+        tags: user
+        become: false

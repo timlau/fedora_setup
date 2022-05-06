@@ -16,6 +16,9 @@ dnf_packages:
   - the_silver_searcher
   - bpytop
 
+dev_packages:
+  - git
+
 flatpaks:
   - net.cozic.joplin_desktop
   - org.gnome.Extensions
