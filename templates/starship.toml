@@ -1,0 +1,13 @@
+[python] 
+disabled = true 
+
+[package]
+disabled = true
+# show info when inside toolbox
+
+[custom.toolbox] 
+command = 'cat /var/run/.containerenv | grep name= | cut -d "=" -f2' 
+when = "test -r /var/run/.containerenv" 
+symbol =  '📦 ' 
+format = "[in $symbol($output )]($style)" 
+disabled = false

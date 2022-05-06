@@ -35,4 +35,26 @@ The `fedora-setup.yml` contains some variables to configure fedora release and h
 
 ```
 
+### Use tags to limit action
+
+To only execute part of the playbook
+
+```bash
+ansible-playbook fedora-setup.yml --ask-become-pass --tags <tags>
+```
+
+To disable part of the playbook
+
+```bash
+ansible-playbook fedora-setup.yml --ask-become-pass --skip-tags <tags>
+```
+
+### defined tags
+* `hostname`: set hostname
+* `user`: actions executed as user
+* `superuser`: actions executed as superuser (via sudo) 
+* `packages`: only install packages & setup rpmfusion repos
+* `flatpak`: install flatpak and add flathub
+* `starship`: install starship
+
 

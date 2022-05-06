@@ -4,10 +4,8 @@
     connection: local 
     gather_facts: false
 
-    vars:
-      fedora_release: 36
-      fedora_hostname: FedoraBox
-
+    vars_files:
+    - vars/user_vars.yml
 
     tasks:  
       - block:
@@ -15,6 +13,7 @@
           hostname:
             name: "{{ fedora_hostname }}"
             use: systemd
+          tags: hostname
 
         - name: Install rpm fusion repo 
           become: true
@@ -24,21 +23,13 @@
                 - 'https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ fedora_release }}.noarch.rpm'
             disable_gpg_check: yes
             state: present
+          tags: packages
 
         - name: Install packages 
           dnf:
-            name: 
-                - neofetch 
-                - tilix
-                - gnome-tweaks
-                - fish 
-                - starship 
-                - powerline-fonts
-                - toolbox
-                - flatpak-builder
-                - the_silver_searcher
-                - bpytop
+            name: "{{ dnf_packages }}"
             state: present
+          tags: packages
             
         - name: Install media codecs
           dnf:
@@ -50,6 +41,7 @@
                 - gstreamer1-libav
             exclude: gstreamer1-plugins-bad-free-devel
             state: present
+          tags: packages
             
         - name: Remove unwanted packages 
           dnf:
@@ -57,6 +49,8 @@
                 - PackageKit-command-not-found
                 - PackageKit-gstreamer-plugin
             state: absent
+          tags: packages
+
         tags: superuser
         become: true
 
@@ -67,25 +61,15 @@
             state: present
             flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
             method: user
+          tags: flatpak
 
         - name: Install flatpaks (flathub)
           flatpak:
             remote: flathub
             method: user
             state: present
-            name:
-              - net.cozic.joplin_desktop
-              - org.gnome.Extensions
-              - com.github.tchx84.Flatseal
-              - org.telegram.desktop
-              - org.inkscape.Inkscape
-              - org.shotcut.Shotcut
-              - org.gimp.GIMP
-              - org.audacityteam.Audacity
-              - com.spotify.Client
-              - de.haeckerfelix.Shortwave
-              - org.gnome.gitlab.somas.Apostrophe
-              - com.github.johnfactotum.Foliate
+            name: "{{ flatpaks }}"
+          tags: flatpak
 
 
         - name: Disable Gnome software download update
@@ -94,5 +78,20 @@
             value: "false"
             state: present
         tags: user
+        become: false
+
+      - block:
+        - name: Insert starship into .bashrc
+          lineinfile:
+            path: ~/.bashrc 
+            line: 'eval "$(starship init bash)"'
+
+        - name: starship config file 
+          copy:
+            src: templates/starship.toml
+            dest: ~/.config/starship.toml
+            mode: 0644
+
+        tags: [ 'user', 'starship' ]
         become: false
 
