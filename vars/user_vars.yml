@@ -1,7 +1,7 @@
 ---
 GIT_USERNAME: 'Tim Lauridsen'
-GIT_EMAIL: "tla@rasmil.dk"
-fedora_release: 36
+GIT_EMAIL: "tim.lauridsen@gmail.com"
+fedora_release: 37
 fedora_hostname: FedoraBox
 
 dnf_packages: 
@@ -9,14 +9,12 @@ dnf_packages:
   - tilix
   - gnome-tweaks
   - fish 
-  - starship 
-  - powerline-fonts
+  - powerline
   - the_silver_searcher
   - bpytop
   - nextcloud-client
 
 dev_packages:
-  - git
   - toolbox
   - flatpak-builder
 

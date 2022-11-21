@@ -80,18 +80,3 @@
         tags: user
         become: false
 
-      - block:
-        - name: Insert starship into .bashrc
-          lineinfile:
-            path: ~/.bashrc 
-            line: 'eval "$(starship init bash)"'
-
-        - name: starship config file 
-          copy:
-            src: templates/starship.toml
-            dest: ~/.config/starship.toml
-            mode: 0644
-
-        tags: [ 'user', 'starship' ]
-        become: false
-
