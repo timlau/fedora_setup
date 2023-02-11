@@ -15,6 +15,19 @@
             use: systemd
           tags: hostname
 
+        - block:
+          - name: Enable starship copr
+            community.general.copr:
+              state: enabled
+              name: atim/starship
+          - name: Enable starship cope
+            community.general.copr:
+              state: enabled
+              name: timlau/yumex-ng
+
+          tags: copr
+          become: true 
+
         - name: Install rpm fusion repo 
           become: true
           dnf:

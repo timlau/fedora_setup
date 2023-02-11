@@ -1,16 +1,13 @@
 ---
-GIT_USERNAME: 'Tim Lauridsen'
+GIT_USERNAME: "Tim Lauridsen"
 GIT_EMAIL: "tim.lauridsen@gmail.com"
 fedora_release: 37
-fedora_hostname: Fedorabox
+fedora_hostname: FedoraBox
 
-dnf_packages: 
-  - neofetch 
-  - tilix
+dnf_packages:
+  - neofetch
   - gnome-tweaks
-  - fish 
-  - powerline
-  - the_silver_searcher
+  - starship
   - bpytop
   - nextcloud-client
 
@@ -30,5 +27,3 @@ flatpaks:
   - de.haeckerfelix.Shortwave
   - org.gnome.gitlab.somas.Apostrophe
   - com.github.johnfactotum.Foliate
-
-...
