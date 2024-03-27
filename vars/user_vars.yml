@@ -1,28 +1,29 @@
+---
 GIT_USERNAME: "Tim Lauridsen"
 GIT_EMAIL: "tla@rasmil.dk"
 fedora_release: 40
-fedora_hostname: BeeBox
+fedora_hostname: Beebox
 
 dnf_packages:
-- neofetch
-- gnome-tweaks
-- starship
-- bpytop
+  - neofetch
+  - gnome-tweaks
+  - starship
+  - bpytop
 
 
 dev_packages:
-- toolbox
-- flatpak-builder
+  - toolbox
+  - flatpak-builder
 
 flatpaks:
-- net.cozic.joplin_desktop
-- com.mattjakeman.ExtensionManager
-- com.github.tchx84.Flatseal
-- org.telegram.desktop
-- org.inkscape.Inkscape
-- org.shotcut.Shotcut
-- org.gimp.GIMP
-- org.audacityteam.Audacity
-- de.haeckerfelix.Shortwave
-- org.gnome.gitlab.somas.Apostrophe
-- com.github.johnfactotum.Foliate
+  - net.cozic.joplin_desktop
+  - com.mattjakeman.ExtensionManager
+  - com.github.tchx84.Flatseal
+  - org.telegram.desktop
+  - org.inkscape.Inkscape
+  - org.shotcut.Shotcut
+  - org.gimp.GIMP
+  - org.audacityteam.Audacity
+  - de.haeckerfelix.Shortwave
+  - org.gnome.gitlab.somas.Apostrophe
+  - com.github.johnfactotum.Foliate
