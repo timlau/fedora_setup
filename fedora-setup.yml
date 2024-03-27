@@ -1,95 +1,92 @@
----
-  - name: "Setup local Fedora system "
-    hosts: localhost
-    connection: local 
-    gather_facts: false
+- name: "Setup local Fedora system "
+  hosts: localhost
+  connection: local
+  gather_facts: false
 
-    vars_files:
-    - vars/user_vars.yml
+  vars_files:
+  - vars/user_vars.yml
 
-    tasks:  
-      - block:
-        - name: Set hostname to FedoraBox
-          hostname:
-            name: "{{ fedora_hostname }}"
-            use: systemd
-          tags: hostname
+  tasks:
+  - block:
+    - name: Set hostname to FedoraBox
+      hostname:
+        name: "{{ fedora_hostname }}"
+        use: systemd
+      tags: hostname
 
-        - block:
-          - name: Enable starship copr
-            community.general.copr:
-              state: enabled
-              name: atim/starship
-          - name: Enable yumex copr
-            community.general.copr:
-              state: enabled
-              name: timlau/yumex-ng
+    - block:
+      - name: Enable starship copr
+        community.general.copr:
+          state: enabled
+          name: atim/starship
+      - name: Enable yumex copr
+        community.general.copr:
+          state: enabled
+          name: timlau/yumex-ng
 
-          tags: copr
-          become: true 
+      tags: copr
+      become: true
 
-        - name: Install rpm fusion repo 
-          become: true
-          dnf:
-            name: 
-                - 'https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ fedora_release }}.noarch.rpm'
-                - 'https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ fedora_release }}.noarch.rpm'
-            disable_gpg_check: yes
-            state: present
-          tags: packages
+    - name: Install rpm fusion repo
+      become: true
+      dnf:
+        name:
+        - "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ fedora_release }}.noarch.rpm"
+        - "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ fedora_release }}.noarch.rpm"
+        disable_gpg_check: yes
+        state: present
+      tags: packages
 
-        - name: Install packages 
-          dnf:
-            name: "{{ dnf_packages }}"
-            state: present
-          tags: packages
-            
-        - name: Install media codecs
-          dnf:
-            name: 
-                - gstreamer1-plugins-bad-* 
-                - gstreamer1-plugins-good-* 
-                - gstreamer1-plugins-base
-                - gstreamer1-plugin-openh264 
-                - gstreamer1-libav
-            exclude: gstreamer1-plugins-bad-free-devel
-            state: present
-          tags: packages
-            
-        - name: Remove unwanted packages 
-          dnf:
-            name: 
-                - PackageKit-command-not-found
-                - PackageKit-gstreamer-plugin
-            state: absent
-          tags: packages
+    - name: Install packages
+      dnf:
+        name: "{{ dnf_packages }}"
+        state: present
+      tags: packages
 
-        tags: superuser
-        become: true
+    - name: Install media codecs
+      dnf:
+        name:
+        - gstreamer1-plugins-bad-*
+        - gstreamer1-plugins-good-*
+        - gstreamer1-plugins-base
+        - gstreamer1-plugin-openh264
+        - gstreamer1-libav
+        exclude: gstreamer1-plugins-bad-free-devel
+        state: present
+      tags: packages
 
-      - block:
-        - name: Add the flathub repository remote to the user installation
-          flatpak_remote:
-            name: flathub
-            state: present
-            flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
-            method: user
-          tags: flatpak
+    - name: Remove unwanted packages
+      dnf:
+        name:
+        - PackageKit-command-not-found
+        - PackageKit-gstreamer-plugin
+        state: absent
+      tags: packages
 
-        - name: Install flatpaks (flathub)
-          flatpak:
-            remote: flathub
-            method: user
-            state: present
-            name: "{{ flatpaks }}"
-          tags: flatpak
+    tags: superuser
+    become: true
 
+  - block:
+    - name: Add the flathub repository remote to the user installation
+      flatpak_remote:
+        name: flathub
+        state: present
+        flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+        method: user
+      tags: flatpak
 
-        - name: Disable Gnome software download update
-          dconf:
-            key: "/org/gnome/software/download-updates"
-            value: "false"
-            state: present
-        tags: user
-        become: false
+    - name: Install flatpaks (flathub)
+      flatpak:
+        remote: flathub
+        method: user
+        state: present
+        name: "{{ flatpaks }}"
+      tags: flatpak
 
+    - name: Disable Gnome software download update
+      dconf:
+        key: "/org/gnome/software/download-updates"
+        value: "false"
+        state: present
+    tags: user
+    become: false

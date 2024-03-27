@@ -1,54 +1,53 @@
----
-  - name: "Setup local Fedora system for development"
-    hosts: localhost
-    connection: local 
-    gather_facts: false
+- name: "Setup local Fedora system for development"
+  hosts: localhost
+  connection: local
+  gather_facts: false
 
-    vars_files:
-    - vars/user_vars.yml
+  vars_files:
+  - vars/user_vars.yml
 
-    tasks:  
-      - block:
-        - name: Add repository for vs code
-          yum_repository:
-            name: vscode
-            file: vscode
-            description: Visual Studio Code
-            baseurl: https://packages.microsoft.com/yumrepos/vscode
-            gpgkey: https://packages.microsoft.com/keys/microsoft.asc
-            gpgcheck: yes
-          tags: ['repo','vscode']
+  tasks:
+  - block:
+    - name: Add repository for vs code
+      yum_repository:
+        name: vscode
+        file: vscode
+        description: Visual Studio Code
+        baseurl: https://packages.microsoft.com/yumrepos/vscode
+        gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+        gpgcheck: yes
+      tags: ["repo", "vscode"]
 
-        - name: Install dev packages 
-          dnf:
-            name: "{{ dev_packages }}"
-            state: present
-          tags: packages
-            
-        tags: superuser
-        become: true
+    - name: Install dev packages
+      dnf:
+        name: "{{ dev_packages }}"
+        state: present
+      tags: packages
 
-      - block:
-        - name: setup git user
-          git_config:
-            name: user.name
-            scope: global
-            value: "{{ GIT_USERNAME }}"
-          tags: git
+    tags: superuser
+    become: true
 
-        - name: setup git email
-          git_config:
-            name: user.email
-            scope: global
-            value: "{{ GIT_EMAIL }}"
-          tags: git
+  - block:
+    - name: setup git user
+      git_config:
+        name: user.name
+        scope: global
+        value: "{{ GIT_USERNAME }}"
+      tags: git
 
-        - name: setup git default branch
-          git_config:
-            name: init.defaultbranch
-            scope: global
-            value: "main"
-          tags: git
+    - name: setup git email
+      git_config:
+        name: user.email
+        scope: global
+        value: "{{ GIT_EMAIL }}"
+      tags: git
 
-        tags: user
-        become: false
+    - name: setup git default branch
+      git_config:
+        name: init.defaultbranch
+        scope: global
+        value: "main"
+      tags: git
+
+    tags: user
+    become: false
