@@ -1,6 +1,6 @@
 GIT_USERNAME: "Tim Lauridsen"
 GIT_EMAIL: "tla@rasmil.dk"
-fedora_release: 39
+fedora_release: 40
 fedora_hostname: FedoraBox
 
 dnf_packages:

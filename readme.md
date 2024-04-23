@@ -60,3 +60,9 @@ ansible-playbook fedora-setup.yml --ask-become-pass --skip-tags <tags>
 * `bashrc` : update .bashrc (starship & zoxide)
 
 
+To overwrite variables set in user_vars
+
+```bash
+ansible-playbook fedora-setup.yml --ask-become-pass -e "fedora_release=39"
+ansible-playbook fedora-setup.yml --ask-become-pass -e "fedora_hostname=BeeBox"
+```
