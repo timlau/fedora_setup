@@ -90,3 +90,13 @@
         state: present
     tags: user
     become: false
+
+  - block:
+    - name: Add starship & zoxide to bashrc
+      blockinfile:
+        dest: ~/.bashrc
+        block: |-
+          eval "$(starship init bash)"
+          eval "$(zoxide init bash)"
+    tags: bashrc
+    become: false
