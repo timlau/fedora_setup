@@ -4,7 +4,7 @@
 
 Install ansible & required collection (flatpak+dconf)
 ```
-sudo dnf install ansible ansible-collection-community-general
+sudo dnf5 install ansible ansible-collection-community-general
 ```
 
 ## Setup system
@@ -30,6 +30,7 @@ ansible-playbook fedora-dev-setup.yml --ask-become-pass
  * add flathub flatpak repo
  * install flatpaks from flathub
  * disable Gnome Software updates auto download
+ * Add starship + zoxide to .bashrc
 
 ### Modifications
 
@@ -55,6 +56,7 @@ ansible-playbook fedora-setup.yml --ask-become-pass --skip-tags <tags>
 * `superuser`: actions executed as superuser (via sudo) 
 * `packages`: only install packages & setup rpmfusion repos
 * `flatpak`: install flatpak and add flathub
-* `starship`: install starship
+* `copr` : add and enable copr repos (starship & yumex-ng)
+* `bashrc` : update .bashrc (starship & zoxide)
 
 
