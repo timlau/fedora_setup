@@ -36,6 +36,13 @@ ansible-playbook fedora-dev-setup.yml --ask-become-pass
 
 The `vars/user_vars.yml` contains some variables to configure packages, flatpak and other variable settings.
 
+### To overwrite variables set in user_vars
+
+```bash
+ansible-playbook fedora-setup.yml --ask-become-pass -e "fedora_release=39"
+ansible-playbook fedora-setup.yml --ask-become-pass -e "fedora_hostname=BeeBox"
+```
+
 ### Use tags to limit action
 
 To only execute part of the playbook
@@ -60,9 +67,3 @@ ansible-playbook fedora-setup.yml --ask-become-pass --skip-tags <tags>
 * `bashrc` : update .bashrc (starship & zoxide)
 
 
-To overwrite variables set in user_vars
-
-```bash
-ansible-playbook fedora-setup.yml --ask-become-pass -e "fedora_release=39"
-ansible-playbook fedora-setup.yml --ask-become-pass -e "fedora_hostname=BeeBox"
-```
