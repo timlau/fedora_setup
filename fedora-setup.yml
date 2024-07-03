@@ -29,7 +29,7 @@
 
     - name: Install rpm fusion repo
       become: true
-      dnf:
+      dnf5:
         name:
         - "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ fedora_release }}.noarch.rpm"
         - "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ fedora_release }}.noarch.rpm"
@@ -38,13 +38,13 @@
       tags: packages
 
     - name: Install packages
-      dnf:
+      dnf5:
         name: "{{ dnf_packages }}"
         state: present
       tags: packages
 
     - name: Install media codecs
-      dnf:
+      dnf5:
         name:
         - gstreamer1-plugins-bad-*
         - gstreamer1-plugins-good-*
@@ -56,7 +56,7 @@
       tags: packages
 
     - name: Remove unwanted packages
-      dnf:
+      dnf5:
         name:
         - PackageKit-command-not-found
         - PackageKit-gstreamer-plugin
@@ -100,3 +100,20 @@
           eval "$(zoxide init bash)"
     tags: bashrc
     become: false
+
+  - block:
+    - name: install onedrive
+      dnf5:
+        name: onedrive
+        state: present
+      become: true
+    - name: setup onedrive service
+      systemd:
+        name: onedrive
+        scope: user
+        enabled: true
+        state: started
+      become: false
+      
+    tags: onedrive
+

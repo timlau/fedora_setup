@@ -19,7 +19,7 @@
       tags: ["repo", "vscode"]
 
     - name: Install dev packages
-      dnf:
+      dnf5:
         name: "{{ dev_packages }}"
         state: present
       tags: packages
