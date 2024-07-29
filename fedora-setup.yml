@@ -8,7 +8,7 @@
 
   tasks:
   - block:
-    - name: Set hostname to FedoraBox
+    - name: Set hostname
       hostname:
         name: "{{ fedora_hostname }}"
         use: systemd
@@ -88,6 +88,13 @@
         key: "/org/gnome/software/download-updates"
         value: "false"
         state: present
+
+    - name: Disable Gnome software update management
+      dconf:
+        key: "/org/gnome/software/allow-updates"
+        value: "false"
+        state: present
+
     tags: user
     become: false
 
