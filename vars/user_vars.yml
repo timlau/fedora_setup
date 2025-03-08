@@ -1,6 +1,6 @@
 GIT_USERNAME: "Tim Lauridsen"
 GIT_EMAIL: "tla@rasmil.dk"
-fedora_release: 40
+fedora_release: 41
 fedora_hostname: FedoraBox
 
 dnf_packages:
@@ -9,14 +9,16 @@ dnf_packages:
 - starship
 - bpytop
 - zoxide
-
+- bat
+- tldr
+- btop
+- neovim
 
 dev_packages:
 - toolbox
 - flatpak-builder
 
 flatpaks:
-- net.cozic.joplin_desktop
 - com.mattjakeman.ExtensionManager
 - com.github.tchx84.Flatseal
 - org.telegram.desktop
