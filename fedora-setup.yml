@@ -127,3 +127,12 @@
       
     tags: onedrive
 
+  - block:
+    - name: install starship config file
+      copy:
+        src: templates/starship.toml
+        dest: ~/.config/starship.toml
+        force: no
+      become: false
+    tags: config_files    
+
