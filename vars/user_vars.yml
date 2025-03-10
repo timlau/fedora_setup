@@ -3,6 +3,12 @@ GIT_EMAIL: "tla@rasmil.dk"
 fedora_release: 41
 fedora_hostname: FedoraBox
 
+copr_repositories:
+  - timlau/yumex-ng
+  - timlau/audio
+  - atim/starship
+  - atim/lazygit
+
 dnf_packages:
   - neofetch
   - gnome-tweaks
