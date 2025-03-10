@@ -104,6 +104,7 @@
               eval "$(fzf --bash)"
               alias cd=z
               alias vi=nvim
+              alias cat=bat
       tags: bashrc
       become: false
 
@@ -145,5 +146,11 @@
             state: link
             force: yes
 
+        - name: install tmux config file
+          file:
+            src: "{{ playbook_dir }}/templates/fedora-config/.tmux.conf"
+            dest: ~/.tmux.conf
+            state: link
+            force: yes
           become: false
       tags: config_files
