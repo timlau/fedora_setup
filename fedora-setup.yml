@@ -4,135 +4,145 @@
   gather_facts: false
 
   vars_files:
-  - vars/user_vars.yml
+    - vars/user_vars.yml
 
   tasks:
-  - block:
-    - name: Set hostname
-      hostname:
-        name: "{{ fedora_hostname }}"
-        use: systemd
-      tags: hostname
+    - block:
+        - name: Set hostname
+          hostname:
+            name: "{{ fedora_hostname }}"
+            use: systemd
+          tags: hostname
+
+        - block:
+            - name: Enable starship copr
+              community.general.copr:
+                state: enabled
+                name: atim/starship
+            - name: Enable yumex copr
+              community.general.copr:
+                state: enabled
+                name: timlau/yumex-ng
+            - name: Enable audio copr
+              community.general.copr:
+                state: enabled
+                name: timlau/audio
+          tags: copr
+          become: true
+
+        - name: Install rpm fusion repo
+          become: true
+          dnf5:
+            name:
+              - "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ fedora_release }}.noarch.rpm"
+              - "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ fedora_release }}.noarch.rpm"
+            disable_gpg_check: yes
+            state: present
+          tags: packages
+
+        - name: Install packages
+          dnf5:
+            name: "{{ dnf_packages }}"
+            state: present
+          tags: packages
+
+        - name: Install media codecs
+          dnf5:
+            name:
+              - gstreamer1-plugins-bad-*
+              - gstreamer1-plugins-good-*
+              - gstreamer1-plugins-base
+              - gstreamer1-plugin-openh264
+              - gstreamer1-libav
+            exclude: gstreamer1-plugins-bad-free-devel
+            state: present
+          tags: packages
+
+        - name: Remove unwanted packages
+          dnf5:
+            name:
+              - PackageKit-command-not-found
+              - PackageKit-gstreamer-plugin
+            state: absent
+          tags: packages
+
+      tags: superuser
+      become: true
 
     - block:
-      - name: Enable starship copr
-        community.general.copr:
-          state: enabled
-          name: atim/starship
-      - name: Enable yumex copr
-        community.general.copr:
-          state: enabled
-          name: timlau/yumex-ng
-      - name: Enable audio copr
-        community.general.copr:
-          state: enabled
-          name: timlau/audio
-      tags: copr
-      become: true
+        - name: Add the flathub repository remote to the user installation
+          flatpak_remote:
+            name: flathub
+            state: present
+            flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+            method: user
+          tags: flatpak
 
-    - name: Install rpm fusion repo
-      become: true
-      dnf5:
-        name:
-        - "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ fedora_release }}.noarch.rpm"
-        - "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ fedora_release }}.noarch.rpm"
-        disable_gpg_check: yes
-        state: present
-      tags: packages
+        - name: Install flatpaks (flathub)
+          flatpak:
+            remote: flathub
+            method: user
+            state: present
+            name: "{{ flatpaks }}"
+          tags: flatpak
 
-    - name: Install packages
-      dnf5:
-        name: "{{ dnf_packages }}"
-        state: present
-      tags: packages
+        - name: Disable Gnome software download update
+          dconf:
+            key: "/org/gnome/software/download-updates"
+            value: "false"
+            state: present
 
-    - name: Install media codecs
-      dnf5:
-        name:
-        - gstreamer1-plugins-bad-*
-        - gstreamer1-plugins-good-*
-        - gstreamer1-plugins-base
-        - gstreamer1-plugin-openh264
-        - gstreamer1-libav
-        exclude: gstreamer1-plugins-bad-free-devel
-        state: present
-      tags: packages
+        - name: Disable Gnome software update management
+          dconf:
+            key: "/org/gnome/software/allow-updates"
+            value: "false"
+            state: present
 
-    - name: Remove unwanted packages
-      dnf5:
-        name:
-        - PackageKit-command-not-found
-        - PackageKit-gstreamer-plugin
-        state: absent
-      tags: packages
-
-    tags: superuser
-    become: true
-
-  - block:
-    - name: Add the flathub repository remote to the user installation
-      flatpak_remote:
-        name: flathub
-        state: present
-        flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
-        method: user
-      tags: flatpak
-
-    - name: Install flatpaks (flathub)
-      flatpak:
-        remote: flathub
-        method: user
-        state: present
-        name: "{{ flatpaks }}"
-      tags: flatpak
-
-    - name: Disable Gnome software download update
-      dconf:
-        key: "/org/gnome/software/download-updates"
-        value: "false"
-        state: present
-
-    - name: Disable Gnome software update management
-      dconf:
-        key: "/org/gnome/software/allow-updates"
-        value: "false"
-        state: present
-
-    tags: user
-    become: false
-
-  - block:
-    - name: Add starship & zoxide to bashrc
-      blockinfile:
-        dest: ~/.bashrc
-        block: |-
-          eval "$(starship init bash)"
-          eval "$(zoxide init bash)"
-    tags: bashrc
-    become: false
-
-  - block:
-    - name: install onedrive
-      dnf5:
-        name: onedrive
-        state: present
-      become: true
-    - name: setup onedrive service
-      systemd:
-        name: onedrive
-        scope: user
-        enabled: true
-        state: started
+      tags: user
       become: false
-      
-    tags: onedrive
 
-  - block:
-    - name: install starship config file
-      copy:
-        src: templates/starship.toml
-        dest: ~/.config/starship.toml
-        force: no
+    - block:
+        - name: Add starship & zoxide to bashrc
+          blockinfile:
+            dest: ~/.bashrc
+            block: |-
+              eval "$(starship init bash)"
+              eval "$(zoxide init bash)"
+              eval "$(fzf --bash)
+      tags: bashrc
       become: false
-    tags: config_files    
 
+    - block:
+        - name: install onedrive
+          dnf5:
+            name: onedrive
+            state: present
+          become: true
+        - name: setup onedrive service
+          systemd:
+            name: onedrive
+            scope: user
+            enabled: true
+            state: started
+          become: false
+
+      tags: onedrive
+
+    - block:
+        - name: install starship config file
+          copy:
+            src: templates/starship.toml
+            dest: ~/.config/starship.toml
+            force: no
+          become: false
+      tags: config_files
+
+    - block:       
+        - name: install neovim config files from fedora-config git repo
+          file:
+            src: "{{ playbook_dir }}/templates/fedora-config/.config/nvim"
+            dest: ~/.config/nvim
+            state: link
+            force: yes
+          become: false
+      tags: config_nvim

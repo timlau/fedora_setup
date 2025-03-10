@@ -13,6 +13,7 @@ dnf_packages:
 - tldr
 - btop
 - neovim
+- fzf
 
 dev_packages:
 - toolbox
