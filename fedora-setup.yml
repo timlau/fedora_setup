@@ -130,19 +130,19 @@
 
     - block:
         - name: install starship config file
-          copy:
-            src: templates/starship.toml
+          file:
+            src: "{{ playbook_dir }}/templates/fedora-config/.config/starship.toml"
             dest: ~/.config/starship.toml
-            force: no
-          become: false
-      tags: config_files
-
-    - block:       
+            state: link
+            force: yes
+        
         - name: install neovim config files from fedora-config git repo
           file:
             src: "{{ playbook_dir }}/templates/fedora-config/.config/nvim"
             dest: ~/.config/nvim
             state: link
             force: yes
+          
           become: false
-      tags: config_nvim
+      tags: config_files
+
