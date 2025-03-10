@@ -10,7 +10,7 @@ sudo dnf5 install ansible ansible-collection-community-general
 
 ## refresh fedora-config git submodule
 
-the fedora config files is stored in the [fedora-config](timlau/fedora-config) git repository.
+the fedora config files is stored in the [fedora-config](https://github.com/timlau/fedora-config) git repository.
 it is added as a git submodule here, to refresh it to the latest version use the following command
 
 ```
