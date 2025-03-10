@@ -4,29 +4,30 @@ fedora_release: 41
 fedora_hostname: FedoraBox
 
 dnf_packages:
-- neofetch
-- gnome-tweaks
-- starship
-- bpytop
-- zoxide
-- bat
-- tldr
-- btop
-- neovim
-- fzf
+  - neofetch
+  - gnome-tweaks
+  - starship
+  - bpytop
+  - zoxide
+  - bat
+  - tldr
+  - btop
+  - neovim
+  - fzf
+  - lazygit
 
 dev_packages:
-- toolbox
-- flatpak-builder
+  - toolbox
+  - flatpak-builder
 
 flatpaks:
-- com.mattjakeman.ExtensionManager
-- com.github.tchx84.Flatseal
-- org.telegram.desktop
-- org.inkscape.Inkscape
-- org.shotcut.Shotcut
-- org.gimp.GIMP
-- org.audacityteam.Audacity
-- de.haeckerfelix.Shortwave
-- org.gnome.gitlab.somas.Apostrophe
-- com.github.johnfactotum.Foliate
+  - com.mattjakeman.ExtensionManager
+  - com.github.tchx84.Flatseal
+  - org.telegram.desktop
+  - org.inkscape.Inkscape
+  - org.shotcut.Shotcut
+  - org.gimp.GIMP
+  - org.audacityteam.Audacity
+  - de.haeckerfelix.Shortwave
+  - org.gnome.gitlab.somas.Apostrophe
+  - com.github.johnfactotum.Foliate

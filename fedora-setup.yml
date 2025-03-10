@@ -19,6 +19,10 @@
               community.general.copr:
                 state: enabled
                 name: atim/starship
+            - name: Enable lazygit copr
+              community.general.copr:
+                state: enabled
+                name: atim/lazygit
             - name: Enable yumex copr
               community.general.copr:
                 state: enabled
@@ -108,7 +112,8 @@
             block: |-
               eval "$(starship init bash)"
               eval "$(zoxide init bash)"
-              eval "$(fzf --bash)
+              eval "$(fzf --bash)"
+              alias cd=z
       tags: bashrc
       become: false
 
@@ -124,6 +129,13 @@
             scope: user
             enabled: true
             state: started
+
+        - name: install .fonts link
+          file:
+            src: ~/OneDrive/03 Resources/Content/Fonts
+            dest: ~/.fonts
+            state: link
+            force: yes
           become: false
 
       tags: onedrive
@@ -135,14 +147,13 @@
             dest: ~/.config/starship.toml
             state: link
             force: yes
-        
+
         - name: install neovim config files from fedora-config git repo
           file:
             src: "{{ playbook_dir }}/templates/fedora-config/.config/nvim"
             dest: ~/.config/nvim
             state: link
             force: yes
-          
+
           become: false
       tags: config_files
-
