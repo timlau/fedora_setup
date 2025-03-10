@@ -103,6 +103,7 @@
               eval "$(zoxide init bash)"
               eval "$(fzf --bash)"
               alias cd=z
+              alias vi=nvim
       tags: bashrc
       become: false
 
