@@ -1,3 +1,0 @@
-[submodule "templates/fedora-config"]
-	path = templates/fedora-config
-	url = git@github.com:timlau/fedora-config.git
