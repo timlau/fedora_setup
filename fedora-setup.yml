@@ -79,7 +79,6 @@
             value: "false"
             state: present
       tags: user
-      become: false
     - block:
         - name: Add starship & zoxide to bashrc
           blockinfile:
@@ -91,8 +90,8 @@
               alias cd=z
               alias vi=nvim
               alias cat=bat
+              alias lg=lazygit
       tags: bashrc
-      become: false
     - block:
         - name: install onedrive
           dnf5:
@@ -105,13 +104,6 @@
             scope: user
             enabled: true
             state: started
-        - name: install .fonts link
-          file:
-            src: ~/OneDrive/03 Resources/Content/Fonts
-            dest: ~/.fonts
-            state: link
-            force: yes
-          become: false
       tags: onedrive
     - block:
         - name: checkout fedora-config git repo
@@ -136,5 +128,16 @@
             dest: ~/.tmux.conf
             state: link
             force: yes
-          become: false
+        - name: install ondrive sync_list config file
+          file:
+            src: "{{ config_dir }}/.config/onedrive/sync_list"
+            dest: ~/.config/onedrive/sync_list
+            state: link
+            force: yes
+        - name: install .fonts link
+          file:
+            src: ~/OneDrive/3.Resources/Content/Fonts
+            dest: ~/.fonts
+            state: link
+            force: yes
       tags: config_files
