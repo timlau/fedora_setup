@@ -2,7 +2,7 @@ GIT_USERNAME: "Tim Lauridsen"
 GIT_EMAIL: "tla@rasmil.dk"
 fedora_release: 41
 fedora_hostname: FedoraBox
-config_dir: ~/udv/github/fedora-config/
+config_dir: ~/udv/github/fedora-config
 
 copr_repositories:
   - timlau/yumex-ng
