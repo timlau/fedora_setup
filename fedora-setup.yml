@@ -134,21 +134,21 @@
     - block:
         - name: install starship config file
           file:
-            src: "{{ playbook_dir }}/templates/fedora-config/.config/starship.toml"
+            src: "{{ config_dir}}/.config/starship.toml"
             dest: ~/.config/starship.toml
             state: link
             force: yes
 
         - name: install neovim config files from fedora-config git repo
           file:
-            src: "{{ playbook_dir }}/templates/fedora-config/.config/nvim"
+            src: "{{ config_dir }}/.config/nvim"
             dest: ~/.config/nvim
             state: link
             force: yes
 
         - name: install tmux config file
           file:
-            src: "{{ playbook_dir }}/templates/fedora-config/.tmux.conf"
+            src: "{{ config_dir }}/.tmux.conf"
             dest: ~/.tmux.conf
             state: link
             force: yes
