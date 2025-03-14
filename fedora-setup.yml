@@ -1,3 +1,4 @@
+---
 - name: "Setup local Fedora system "
   hosts: localhost
   connection: local
@@ -5,36 +6,38 @@
   vars_files:
     - vars/user_vars.yml
   tasks:
-    - block:
+    - tags: superuser
+      become: true
+      block:
         - name: Set hostname
-          hostname:
+          ansible.builtin.hostname:
             name: "{{ fedora_hostname }}"
             use: systemd
           tags: hostname
-        - block:
+        - tags: copr
+          become: true
+          block:
             - name: Enable copr repositories
               community.general.copr:
                 state: enabled
                 name: "{{ item }}"
-              loop: "{{copr_repositories}}"
-          tags: copr
-          become: true
+              loop: "{{ copr_repositories }}"
         - name: Install rpm fusion repo
           become: true
-          dnf5:
+          ansible.builtin.dnf5:
             name:
-              - "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ fedora_release }}.noarch.rpm"
-              - "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ fedora_release }}.noarch.rpm"
-            disable_gpg_check: yes
+              - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ fedora_release }}.noarch.rpm
+              - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ fedora_release }}.noarch.rpm
+            disable_gpg_check: true
             state: present
           tags: packages
         - name: Install packages
-          dnf5:
+          ansible.builtin.dnf5:
             name: "{{ dnf_packages }}"
             state: present
           tags: packages
         - name: Install media codecs
-          dnf5:
+          ansible.builtin.dnf5:
             name:
               - gstreamer1-plugins-bad-*
               - gstreamer1-plugins-good-*
@@ -45,43 +48,42 @@
             state: present
           tags: packages
         - name: Remove unwanted packages
-          dnf5:
+          ansible.builtin.dnf5:
             name:
               - PackageKit-command-not-found
               - PackageKit-gstreamer-plugin
             state: absent
           tags: packages
-      tags: superuser
-      become: true
-    - block:
+    - tags: user
+      block:
         - name: Add the flathub repository remote to the user installation
-          flatpak_remote:
+          community.general.flatpak_remote:
             name: flathub
             state: present
             flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
             method: user
           tags: flatpak
         - name: Install flatpaks (flathub)
-          flatpak:
+          community.general.flatpak:
             remote: flathub
             method: user
             state: present
             name: "{{ flatpaks }}"
           tags: flatpak
         - name: Disable Gnome software download update
-          dconf:
-            key: "/org/gnome/software/download-updates"
+          community.general.dconf:
+            key: /org/gnome/software/download-updates
             value: "false"
             state: present
         - name: Disable Gnome software update management
-          dconf:
-            key: "/org/gnome/software/allow-updates"
+          community.general.dconf:
+            key: /org/gnome/software/allow-updates
             value: "false"
             state: present
-      tags: user
-    - block:
+    - tags: bashrc
+      block:
         - name: Add starship & zoxide to bashrc
-          blockinfile:
+          ansible.builtin.blockinfile:
             dest: ~/.bashrc
             block: |-
               eval "$(starship init bash)"
@@ -91,53 +93,52 @@
               alias vi=nvim
               alias cat=bat
               alias lg=lazygit
-      tags: bashrc
-    - block:
-        - name: install onedrive
-          dnf5:
+    - tags: onedrive
+      block:
+        - name: Install onedrive
+          ansible.builtin.dnf5:
             name: onedrive
             state: present
           become: true
-        - name: setup onedrive service
-          systemd:
+        - name: Setup onedrive service
+          ansible.builtin.systemd:
             name: onedrive
             scope: user
             enabled: true
             state: started
-      tags: onedrive
-    - block:
-        - name: checkout fedora-config git repo
-          git:
+    - tags: config_files
+      block:
+        - name: Checkout fedora-config git repo
+          ansible.builtin.git:
             repo: git@github.com:timlau/fedora-config.git
             dest: "{{ config_dir }}"
-        - name: install starship config file
-          file:
-            src: "{{ config_dir}}/.config/starship.toml"
+        - name: Install starship config file
+          ansible.builtin.file:
+            src: "{{ config_dir }}/.config/starship.toml"
             dest: ~/.config/starship.toml
             state: link
-            force: yes
-        - name: install neovim config files from fedora-config git repo
-          file:
+            force: true
+        - name: Install neovim config files from fedora-config git repo
+          ansible.builtin.file:
             src: "{{ config_dir }}/.config/nvim"
             dest: ~/.config/nvim
             state: link
-            force: yes
-        - name: install tmux config file
-          file:
+            force: true
+        - name: Install tmux config file
+          ansible.builtin.file:
             src: "{{ config_dir }}/.tmux.conf"
             dest: ~/.tmux.conf
             state: link
-            force: yes
-        - name: install ondrive sync_list config file
-          file:
+            force: true
+        - name: Install ondrive sync_list config file
+          ansible.builtin.file:
             src: "{{ config_dir }}/.config/onedrive/sync_list"
             dest: ~/.config/onedrive/sync_list
             state: link
-            force: yes
-        - name: install .fonts link
-          file:
+            force: true
+        - name: Install .fonts link
+          ansible.builtin.file:
             src: ~/OneDrive/3.Resources/Content/Fonts
             dest: ~/.fonts
             state: link
-            force: yes
-      tags: config_files
+            force: true
