@@ -1,4 +1,3 @@
----
 - name: "Setup local Fedora system "
   hosts: localhost
   connection: local
@@ -6,36 +5,33 @@
   vars_files:
     - vars/user_vars.yml
   tasks:
-    - tags: superuser
+    - name: Set hostname
+      tags: hostname
+      become: true
+      ansible.builtin.hostname:
+        name: "{{ fedora_hostname }}"
+        use: systemd
+    - name: Setup repositories and install packages
+      tags: packages
       become: true
       block:
-        - name: Set hostname
-          ansible.builtin.hostname:
-            name: "{{ fedora_hostname }}"
-            use: systemd
-          tags: hostname
-        - tags: copr
-          become: true
-          block:
-            - name: Enable copr repositories
-              community.general.copr:
-                state: enabled
-                name: "{{ item }}"
-              loop: "{{ copr_repositories }}"
+        - name: Enable copr repositories
+          tags: copr
+          community.general.copr:
+            state: enabled
+            name: "{{ item }}"
+          loop: "{{ copr_repositories }}"
         - name: Install rpm fusion repo
-          become: true
           ansible.builtin.dnf5:
             name:
               - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ fedora_release }}.noarch.rpm
               - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ fedora_release }}.noarch.rpm
             disable_gpg_check: true
             state: present
-          tags: packages
         - name: Install packages
           ansible.builtin.dnf5:
             name: "{{ dnf_packages }}"
             state: present
-          tags: packages
         - name: Install media codecs
           ansible.builtin.dnf5:
             name:
@@ -46,15 +42,14 @@
               - gstreamer1-libav
             exclude: gstreamer1-plugins-bad-free-devel
             state: present
-          tags: packages
         - name: Remove unwanted packages
           ansible.builtin.dnf5:
             name:
               - PackageKit-command-not-found
               - PackageKit-gstreamer-plugin
             state: absent
-          tags: packages
-    - tags: user
+    - name: Setup flatpak repo and install needed flatpaks
+      tags: flatpak
       block:
         - name: Add the flathub repository remote to the user installation
           community.general.flatpak_remote:
@@ -62,14 +57,15 @@
             state: present
             flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
             method: user
-          tags: flatpak
         - name: Install flatpaks (flathub)
           community.general.flatpak:
             remote: flathub
             method: user
             state: present
             name: "{{ flatpaks }}"
-          tags: flatpak
+    - name: Configure gnome-software
+      tags: gnome-software
+      block:
         - name: Disable Gnome software download update
           community.general.dconf:
             key: /org/gnome/software/download-updates
@@ -80,9 +76,10 @@
             key: /org/gnome/software/allow-updates
             value: "false"
             state: present
-    - tags: bashrc
+    - name: Setup .bashrc
+      tags: bashrc
       block:
-        - name: Add starship & zoxide to bashrc
+        - name: Add starship, zoxide, fzf and aliases to bashrc
           ansible.builtin.blockinfile:
             dest: ~/.bashrc
             block: |-
@@ -93,7 +90,8 @@
               alias vi=nvim
               alias cat=bat
               alias lg=lazygit
-    - tags: onedrive
+    - name: Setup OneDrive service
+      tags: onedrive
       block:
         - name: Install onedrive
           ansible.builtin.dnf5:
@@ -106,12 +104,14 @@
             scope: user
             enabled: true
             state: started
-    - tags: config_files
+    - name: Setup configuration files from fedora-config repository
+      tags: config_files
       block:
         - name: Checkout fedora-config git repo
           ansible.builtin.git:
             repo: git@github.com:timlau/fedora-config.git
             dest: "{{ config_dir }}"
+            version: HEAD
         - name: Install starship config file
           ansible.builtin.file:
             src: "{{ config_dir }}/.config/starship.toml"

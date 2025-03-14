@@ -5,7 +5,8 @@
   vars_files:
     - vars/user_vars.yml
   tasks:
-    - tags: superuser
+    - name: Setup repositories and install development packages
+      tags: superuser, packages
       become: true
       block:
         - name: Add repository for vs code
@@ -16,13 +17,12 @@
             baseurl: https://packages.microsoft.com/yumrepos/vscode
             gpgkey: https://packages.microsoft.com/keys/microsoft.asc
             gpgcheck: true
-          tags: [repo, vscode]
         - name: Install dev packages
           ansible.builtin.dnf5:
             name: "{{ dev_packages }}"
             state: present
-          tags: packages
-    - tags: user, git
+    - name: Git configuration
+      tags: user, git
       become: false
       block:
         - name: Setup git user

@@ -1,0 +1,5 @@
+# .ansible-lint
+profile: production # min, basic, moderate,safety, shared, production
+use_default_rules: true
+skip_list:
+  - latest[git]
