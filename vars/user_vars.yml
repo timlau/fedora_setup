@@ -11,7 +11,7 @@ copr_repositories:
   - atim/lazygit
 
 dnf_packages:
-  - neofetch
+  - fastfetch
   - gnome-tweaks
   - starship
   - bpytop
