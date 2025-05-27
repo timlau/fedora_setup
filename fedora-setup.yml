@@ -28,6 +28,7 @@
               - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ fedora_release }}.noarch.rpm
             disable_gpg_check: true
             state: present
+          ignore_errors: true
         - name: Install packages
           ansible.builtin.dnf5:
             name: "{{ dnf_packages }}"
@@ -109,7 +110,7 @@
       block:
         - name: Checkout fedora-config git repo
           ansible.builtin.git:
-            repo: git@github.com:timlau/fedora-config.git
+            repo: git@github.com:timlau/dotfiles.git
             dest: "{{ config_dir }}"
             version: HEAD
         - name: Install starship config file
