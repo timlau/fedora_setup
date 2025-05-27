@@ -1,7 +1,7 @@
 setup = fedora-setup.yml
 setup-dev = fedora-dev-setup.yml
 hostname = FedoraBox
-release = 41
+release = 42
 parameters = -e "fedora_hostname=${hostname}" -e "fedora_release=${release}"
 
 all:
