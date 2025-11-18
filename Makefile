@@ -8,7 +8,7 @@ all:
 	echo "Notthing to do"
 
 inst-deps:
-	sudo dnf install ansible ansible-collection-community-general ansible-lint
+	sudo dnf install ansible ansible-collection-community-general ansible-lint python3-psutil
 
 setup:
 	ansible-playbook --ask-become-pass ${parameters} ${setup} 
