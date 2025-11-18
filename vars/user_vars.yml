@@ -14,7 +14,7 @@ dnf_packages:
   - fastfetch
   - gnome-tweaks
   - starship
-  - bpytop
+  - btop
   - zoxide
   - bat
   - tldr

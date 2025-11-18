@@ -4,6 +4,7 @@
   gather_facts: false
   vars_files:
     - vars/user_vars.yml
+  ignore_errors: true
   tasks:
     - name: Set hostname
       tags: hostname
