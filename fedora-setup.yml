@@ -92,6 +92,7 @@
               alias vi=nvim
               alias cat=bat
               alias lg=lazygit
+              alias upd='cd ~/udv/github/dotfiles; git commit -a -m "update config"; git push'
     - name: Setup OneDrive service
       tags: onedrive
       block:
