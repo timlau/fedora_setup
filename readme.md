@@ -57,7 +57,10 @@ make release=41 setup[-all]
 To only execute part of the playbook
 
 ```bash
-ansible-playbook fedora-setup.yml --ask-become-pass --tags <tags>
+make tags=<tags> setup-tags
+
+# Example: Only set hostname to FedoraBox
+make tags=hostname hostname=FedoraBox setup-tags
 ```
 
 To disable part of the playbook
