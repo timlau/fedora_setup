@@ -120,6 +120,12 @@
             dest: ~/.config/starship.toml
             state: link
             force: true
+        - name: Install zed config files from dotfiles git repo
+          ansible.builtin.file:
+            src: "{{ config_dir }}/.config/zed"
+            dest: ~/.config/zed
+            state: link
+            force: true
         - name: Install neovim config files from fedora-config git repo
           ansible.builtin.file:
             src: "{{ config_dir }}/.config/nvim"
