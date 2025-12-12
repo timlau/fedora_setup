@@ -23,6 +23,12 @@ setup-all:
 setup-tags:
 	ansible-playbook --ask-become-pass -${parameters} ${setup} ${setup-dev} --tags ${tags}
 
+setup-configfiles:
+	ansible-playbook ${setup}  --tags config_files
+
+setup-bash:
+	ansible-playbook ${setup}  --tags bashrc
+
 lint:
 	ansible-lint ${setup}
 	ansible-lint ${setup-dev}
