@@ -33,4 +33,4 @@ lint:
 	ansible-lint ${setup}
 	ansible-lint ${setup-dev}
 
-.PNONY: all lint setup setup-dev setup-all inst-deps
+.PNONY: all lint setup setup-dev setup-all inst-deps setup-configfiles setup-bash setup-tags
