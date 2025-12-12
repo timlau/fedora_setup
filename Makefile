@@ -1,6 +1,6 @@
 setup = fedora-setup.yml
 setup-dev = fedora-dev-setup.yml
-hostname = BeeBox
+hostname = FedoraBox
 release = 43
 parameters = -e "fedora_hostname=${hostname}" -e "fedora_release=${release}"
 tags =

@@ -1,6 +1,6 @@
 GIT_USERNAME: "Tim Lauridsen"
 GIT_EMAIL: "tla@rasmil.dk"
-fedora_release: 41
+fedora_release: 43
 fedora_hostname: FedoraBox
 config_dir: ~/udv/github/dotfiles
 
