@@ -167,6 +167,12 @@
             owner: "{{ ansible_user_id }}"
             mode: "0644"
 
+        - name: Ensure default shell is /bin/fish for "{{ ansible_user_id }}"
+          ansible.builtin.user:
+            name: "{{ ansible_user_id }}"
+            shell: /bin/fish
+          become: true
+
         - name: Install Fisher (if not already present)
           ansible.builtin.shell: |
             # Check if Fisher function exists

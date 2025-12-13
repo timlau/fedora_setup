@@ -30,7 +30,7 @@ setup-bash:
 	ansible-playbook ${setup}  --tags bashrc
 
 setup-fish:
-	ansible-playbook ${setup}  --tags fish
+	ansible-playbook ${setup}  --tags fish --ask-become-pass
 
 
 lint:
