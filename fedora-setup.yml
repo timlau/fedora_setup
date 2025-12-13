@@ -1,7 +1,7 @@
 - name: "Setup local Fedora system "
   hosts: localhost
   connection: local
-  gather_facts: false
+  gather_facts: true
   vars_files:
     - vars/user_vars.yml
   ignore_errors: true
@@ -110,7 +110,7 @@
     - name: Setup configuration files from fedora-config repository
       tags: config_files
       block:
-        - name: Checkout fedora-config git repo
+        - name: Checkout dotfiles git repo
           ansible.builtin.git:
             repo: git@github.com:timlau/dotfiles.git
             dest: "{{ config_dir }}"
@@ -151,3 +151,49 @@
             dest: ~/.fonts
             state: link
             force: true
+    - name: Setup aliases for fish shell
+      tags: fish
+      block:
+        - name: Ensure fish configuration directory exists
+          ansible.builtin.file:
+            path: "{{ fish_config_dir }}/conf.d"
+            state: directory
+            mode: "0755"
+
+        - name: Deploy custom fish aliases
+          ansible.builtin.template:
+            src: aliases.fish
+            dest: "{{ fish_config_dir }}/conf.d/aliases.fish"
+            owner: "{{ ansible_user_id }}"
+            mode: "0644"
+
+        - name: Install Fisher (if not already present)
+          ansible.builtin.shell: |
+            # Check if Fisher function exists
+            if not type -q fisher
+              # Install Fisher
+              curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
+              exit 1
+            else
+              echo "Fisher is already installed."
+              exit 0
+            end
+          args:
+            executable: /usr/bin/fish
+            chdir: "{{ ansible_facts.user_dir }}"
+          register: fisher_install_result
+          changed_when: fisher_install_result.rc != 0
+
+        - name: Deploy the complete fish_plugins file
+          ansible.builtin.template:
+            src: fish_plugins.j2
+            dest: "{{ fish_plugins_file }}"
+            owner: "{{ ansible_user_id }}"
+            mode: "0644"
+
+        - name: Run fisher update to install/sync plugins
+          ansible.builtin.shell: |
+            fish -c "fisher update"
+          args:
+            executable: /usr/bin/fish
+            chdir: "{{ ansible_facts.user_dir }}"

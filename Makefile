@@ -29,6 +29,10 @@ setup-configfiles:
 setup-bash:
 	ansible-playbook ${setup}  --tags bashrc
 
+setup-fish:
+	ansible-playbook ${setup}  --tags fish
+
+
 lint:
 	ansible-lint ${setup}
 	ansible-lint ${setup-dev}

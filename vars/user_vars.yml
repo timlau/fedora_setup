@@ -3,6 +3,14 @@ GIT_EMAIL: "tla@rasmil.dk"
 fedora_release: 43
 fedora_hostname: FedoraBox
 config_dir: ~/udv/github/dotfiles
+fish_config_dir: ~/.config/fish
+fish_plugins_file: ~/.config/fish/fish_plugins
+
+fisher_plugins:
+  - icezyclon/zoxide.fish
+  - patrickf1/fzf.fish
+  - wawa19933/starship.fish
+  - jorgebucaran/fisher
 
 copr_repositories:
   - timlau/yumex-ng
@@ -23,6 +31,7 @@ dnf_packages:
   - fzf
   - lazygit
   - yumex
+  - fish
 
 dev_packages:
   - toolbox
