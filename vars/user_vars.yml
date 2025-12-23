@@ -58,3 +58,4 @@ dotfiles_packages:
   - starship
   - tmux
   - onedrive
+  - fish
