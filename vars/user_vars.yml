@@ -2,9 +2,9 @@ GIT_USERNAME: "Tim Lauridsen"
 GIT_EMAIL: "tla@rasmil.dk"
 fedora_release: 43
 fedora_hostname: FedoraBox
-config_dir: ~/udv/github/dotfiles
 fish_config_dir: ~/.config/fish
 fish_plugins_file: ~/.config/fish/fish_plugins
+dotfiles_dir: ~/dotfiles
 
 fisher_plugins:
   - icezyclon/zoxide.fish
@@ -32,6 +32,7 @@ dnf_packages:
   - lazygit
   - yumex
   - fish
+  - stow
 
 dev_packages:
   - toolbox
@@ -49,3 +50,11 @@ flatpaks:
   - de.haeckerfelix.Shortwave
   - org.gnome.gitlab.somas.Apostrophe
   - com.github.johnfactotum.Foliate
+
+# List the folder names in your dotfiles directory you want to stow
+dotfiles_packages:
+  - zed
+  - nvim
+  - starship
+  - tmux
+  - onedrive

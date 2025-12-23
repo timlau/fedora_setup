@@ -35,6 +35,10 @@ setup-fish:
 setup-zed:
 	ansible-playbook ${setup-dev}  --tags zed
 
+setup-dotfiles:
+	ansible-playbook ${setup} --tags dotfiles
+
+
 
 
 lint:

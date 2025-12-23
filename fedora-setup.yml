@@ -110,48 +110,13 @@
     - name: Setup configuration files from fedora-config repository
       tags: config_files
       block:
-        - name: Checkout dotfiles git repo
-          ansible.builtin.git:
-            repo: git@github.com:timlau/dotfiles.git
-            dest: "{{ config_dir }}"
-            version: HEAD
-        - name: Install starship config file
-          ansible.builtin.file:
-            src: "{{ config_dir }}/.config/starship.toml"
-            dest: ~/.config/starship.toml
-            state: link
-            force: true
-        - name: Install zed config files from dotfiles git repo
-          ansible.builtin.file:
-            src: "{{ config_dir }}/.config/zed"
-            dest: ~/.config/zed
-            state: link
-            force: true
-        - name: Install neovim config files from fedora-config git repo
-          ansible.builtin.file:
-            src: "{{ config_dir }}/.config/nvim"
-            dest: ~/.config/nvim
-            state: link
-            force: true
-        - name: Install tmux config file
-          ansible.builtin.file:
-            src: "{{ config_dir }}/.tmux.conf"
-            dest: ~/.tmux.conf
-            state: link
-            force: true
-        - name: Install ondrive sync_list config file
-          ansible.builtin.file:
-            src: "{{ config_dir }}/.config/onedrive/sync_list"
-            dest: ~/.config/onedrive/sync_list
-            state: link
-            force: true
         - name: Install .fonts link
           ansible.builtin.file:
             src: ~/OneDrive/3.Resources/Content/Fonts
             dest: ~/.fonts
             state: link
             force: true
-    - name: Setup aliases for fish shell
+    - name: Setup fish shell
       tags: fish
       block:
         - name: Ensure fish configuration directory exists
@@ -159,13 +124,6 @@
             path: "{{ fish_config_dir }}/conf.d"
             state: directory
             mode: "0755"
-
-        - name: Deploy custom fish aliases
-          ansible.builtin.template:
-            src: aliases.fish
-            dest: "{{ fish_config_dir }}/conf.d/aliases.fish"
-            owner: "{{ ansible_user_id }}"
-            mode: "0644"
 
         - name: Ensure default shell is /bin/fish for "{{ ansible_user_id }}"
           ansible.builtin.user:
@@ -203,3 +161,19 @@
           args:
             executable: /usr/bin/fish
             chdir: "{{ ansible_facts.user_dir }}"
+
+    - name: Manage Dotfiles with Stow
+      tags: dotfiles
+      block:
+        - name: Checkout dotfiles git repo
+          ansible.builtin.git:
+            repo: git@github.com:timlau/dotfiles.git
+            dest: "{{ dotfiles_dir }}"
+            version: HEAD
+        - name: Use Stow to create symlinks
+          ansible.builtin.shell:
+            cmd: "stow -R -t {{ ansible_facts.user_dir }} {{ item }}"
+            chdir: "{{ dotfiles_dir }}"
+          loop: "{{ dotfiles_packages }}"
+          register: stow_result
+          changed_when: 'stow_result.stderr != ""'
