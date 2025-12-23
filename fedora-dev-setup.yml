@@ -1,7 +1,7 @@
 - name: Setup local Fedora system for development
   hosts: localhost
   connection: local
-  gather_facts: false
+  gather_facts: true
   vars_files:
     - vars/user_vars.yml
   tasks:
@@ -45,3 +45,34 @@
             name: alias.graph
             scope: global
             value: log --graph --abbrev-commit --date=relative --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(cyan)<%an>%Creset'
+
+    - name: install zed preview
+      tags: zed, user
+      become: false
+      block:
+        - name: Check if Zed binary exists
+          ansible.builtin.stat:
+            path: "{{ ansible_facts.user_dir }}/.local/bin/zed"
+          register: zed_binary
+
+        - name: Install Zed editor if not present
+          block:
+            - name: Download the Zed installation script
+              ansible.builtin.get_url:
+                url: https://zed.dev/install.sh
+                dest: /tmp/install_zed.sh
+                mode: "0755"
+
+            - name: Run the Zed installation script
+              ansible.builtin.command: /tmp/install_zed.sh
+              environment:
+                ZED_CHANNEL: preview
+              register: zed_install_result
+              changed_when: "'Installed' in zed_install_result.stdout"
+
+            - name: Remove the installation script
+              ansible.builtin.file:
+                path: /tmp/install_zed.sh
+                state: absent
+          # Now zed_binary is defined because the task above finished first
+          when: not zed_binary.stat.exists

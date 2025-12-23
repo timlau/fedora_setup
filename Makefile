@@ -32,6 +32,10 @@ setup-bash:
 setup-fish:
 	ansible-playbook ${setup}  --tags fish --ask-become-pass
 
+setup-zed:
+	ansible-playbook ${setup-dev}  --tags zed
+
+
 
 lint:
 	ansible-lint ${setup}
