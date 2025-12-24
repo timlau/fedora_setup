@@ -33,7 +33,8 @@ dnf_packages:
   - yumex
   - fish
   - stow
-  - fd
+  - fd-find
+  - pass
 
 dev_packages:
   - toolbox
