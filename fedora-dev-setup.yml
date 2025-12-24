@@ -9,6 +9,14 @@
       tags: superuser, packages
       become: true
       block:
+        - name: Add repository for github cli
+          ansible.builtin.yum_repository:
+            name: gh-cli
+            file: gh-cli
+            description: Github CLI
+            baseurl: https://cli.github.com/packages/rpm
+            gpgkey: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x23F3D4EA75716059
+            gpgcheck: true
         - name: Add repository for vs code
           ansible.builtin.yum_repository:
             name: vscode

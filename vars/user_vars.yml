@@ -39,6 +39,7 @@ dev_packages:
   - toolbox
   - flatpak-builder
   - code
+  - gh
 
 flatpaks:
   - com.mattjakeman.ExtensionManager
