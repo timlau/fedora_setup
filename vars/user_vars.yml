@@ -17,6 +17,7 @@ copr_repositories:
   - timlau/audio
   - atim/starship
   - atim/lazygit
+  - varlad/yazi
 
 dnf_packages:
   - fastfetch
@@ -35,6 +36,7 @@ dnf_packages:
   - stow
   - fd-find
   - pass
+  - yazi
 
 dev_packages:
   - toolbox
