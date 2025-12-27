@@ -18,6 +18,7 @@ copr_repositories:
   - atim/starship
   - atim/lazygit
   - varlad/yazi
+  - scottames/ghostty
 
 dnf_packages:
   - fastfetch
@@ -37,6 +38,7 @@ dnf_packages:
   - fd-find
   - pass
   - yazi
+  - ghostty
 
 dev_packages:
   - toolbox
