@@ -162,6 +162,14 @@
             executable: /usr/bin/fish
             chdir: "{{ ansible_facts.user_dir }}"
 
+    - name: Install tmux plugin manager
+      tags: tmux
+      block:
+        - name: Checkout tmux plugin manager git repo
+          ansible.builtin.git:
+            repo: https://github.com/tmux-plugins/tpm
+            dest: "~/.tmux/plugins/tpm"
+            version: HEAD
     - name: Manage Dotfiles with Stow
       tags: dotfiles
       block:
