@@ -66,3 +66,5 @@ dotfiles_packages:
   - tmux
   - onedrive
   - fish
+  - yazi
+  - ghostty
