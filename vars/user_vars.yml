@@ -39,6 +39,7 @@ dnf_packages:
   - pass
   - yazi
   - ghostty
+  - du-dust
 
 dev_packages:
   - toolbox
