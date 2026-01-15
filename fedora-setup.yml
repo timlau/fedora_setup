@@ -180,8 +180,10 @@
             version: HEAD
         - name: Use Stow to create symlinks
           ansible.builtin.shell:
-            cmd: "stow -R -t {{ ansible_facts.user_dir }} {{ item }}"
+            cmd: "make stow-all"
             chdir: "{{ dotfiles_dir }}"
-          loop: "{{ dotfiles_packages }}"
           register: stow_result
           changed_when: 'stow_result.stderr != ""'
+        - name: Print stderr output from stow-all
+          ansible.builtin.debug:
+            var: stow_result.stderr
