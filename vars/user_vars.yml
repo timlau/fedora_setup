@@ -19,6 +19,7 @@ copr_repositories:
   - atim/lazygit
   - varlad/yazi
   - scottames/ghostty
+  - monkeygold/nautilus-open-any-terminal
 
 dnf_packages:
   - fastfetch
@@ -40,6 +41,7 @@ dnf_packages:
   - yazi
   - ghostty
   - du-dust
+  - nautilus-open-any-terminal
 
 dev_packages:
   - toolbox
@@ -50,14 +52,13 @@ dev_packages:
 flatpaks:
   - com.mattjakeman.ExtensionManager
   - com.github.tchx84.Flatseal
-  - org.telegram.desktop
   - org.inkscape.Inkscape
   - org.shotcut.Shotcut
   - org.gimp.GIMP
   - org.audacityteam.Audacity
-  - de.haeckerfelix.Shortwave
   - org.gnome.gitlab.somas.Apostrophe
-  - com.github.johnfactotum.Foliate
+  - com.saivert.pwvucontrol
+  - org.pipewire.Helvum
 
 # List the folder names in your dotfiles directory you want to stow
 dotfiles_packages:
