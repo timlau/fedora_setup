@@ -187,3 +187,4 @@
         - name: Print stderr output from stow-all
           ansible.builtin.debug:
             var: stow_result.stderr
+          when: stow_result.stderr != ""
