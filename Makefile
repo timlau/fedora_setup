@@ -38,7 +38,8 @@ setup-zed:
 setup-dotfiles:
 	ansible-playbook ${setup} --tags dotfiles
 
-
+setup-toolbox:
+	ansible-playbook ${setup}  --tags toolbox --ask-become-pass
 
 
 lint:
