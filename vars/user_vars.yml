@@ -59,3 +59,4 @@ flatpaks:
   - org.gnome.gitlab.somas.Apostrophe
   - com.saivert.pwvucontrol
   - org.pipewire.Helvum
+  - md.obsidian.Obsidian
