@@ -47,7 +47,6 @@ dnf_packages:
 dev_packages:
   - toolbox
   - flatpak-builder
-  - code
   - gh
 
 flatpaks:
@@ -60,4 +59,3 @@ flatpaks:
   - org.gnome.gitlab.somas.Apostrophe
   - com.saivert.pwvucontrol
   - org.pipewire.Helvum
-

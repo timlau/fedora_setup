@@ -1,4 +1,4 @@
-- name: Setup local Fedora system for development
+- name: Setup local Fedorasystem for development
   hosts: localhost
   connection: local
   gather_facts: true
@@ -16,14 +16,6 @@
             description: Github CLI
             baseurl: https://cli.github.com/packages/rpm
             gpgkey: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x23F3D4EA75716059
-            gpgcheck: true
-        - name: Add repository for vs code
-          ansible.builtin.yum_repository:
-            name: vscode
-            file: vscode
-            description: Visual Studio Code
-            baseurl: https://packages.microsoft.com/yumrepos/vscode
-            gpgkey: https://packages.microsoft.com/keys/microsoft.asc
             gpgcheck: true
         - name: Install dev packages
           ansible.builtin.dnf5:
