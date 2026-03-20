@@ -139,9 +139,9 @@
             state: directory
             mode: "0755"
 
-        - name: Ensure default shell is /bin/fish for "{{ ansible_user_id }}"
+        - name: Ensure default shell is /bin/fish for "{{ ansible_facts['user_id'] }}"
           ansible.builtin.user:
-            name: "{{ ansible_user_id }}"
+            name:  "{{ ansible_facts['user_id'] }}"
             shell: /bin/fish
           become: true
 
@@ -158,7 +158,7 @@
             end
           args:
             executable: /usr/bin/fish
-            chdir: "{{ ansible_facts.user_dir }}"
+            chdir:  "{{ ansible_facts['user_dir'] }}"
           register: fisher_install_result
           changed_when: fisher_install_result.rc != 0
 
@@ -166,7 +166,7 @@
           ansible.builtin.template:
             src: fish_plugins.j2
             dest: "{{ fish_plugins_file }}"
-            owner: "{{ ansible_user_id }}"
+            owner: "{{ ansible_facts['user_id'] }}"
             mode: "0644"
 
         - name: Run fisher update to install/sync plugins
@@ -174,7 +174,7 @@
             fish -c "fisher update"
           args:
             executable: /usr/bin/fish
-            chdir: "{{ ansible_facts.user_dir }}"
+            chdir: "{{ ansible_facts['user_dir'] }}"
 
     - name: Install tmux plugin manager
       tags: tmux
