@@ -1,6 +1,6 @@
 GIT_USERNAME: "Tim Lauridsen"
 GIT_EMAIL: "tla@rasmil.dk"
-fedora_release: 43
+fedora_release: 44
 fedora_hostname: FedoraBox
 fish_config_dir: ~/.config/fish
 fish_plugins_file: ~/.config/fish/fish_plugins
