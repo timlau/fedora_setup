@@ -21,6 +21,7 @@ copr_repositories:
   - varlad/yazi
   - scottames/ghostty
   - monkeygold/nautilus-open-any-terminal
+  - ycollet/audinux
 
 dnf_packages:
   - fastfetch
