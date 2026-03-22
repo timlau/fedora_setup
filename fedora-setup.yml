@@ -124,12 +124,17 @@
     - name: Setup configuration files from fedora-config repository
       tags: config_files
       block:
+        - name: Check if .fonts directory exists
+          ansible.builtin.stat:
+            path: "{{ ansible_facts.user_dir }}/.fonts"
+          register: fonts_dir
         - name: Install .fonts link
           ansible.builtin.file:
             src: ~/OneDrive/3.Resources/Content/Fonts
             dest: ~/.fonts
             state: link
             force: true
+          when: fonts_dir.stat.exists == false
     - name: Setup fish shell
       tags: fish
       block:
@@ -187,11 +192,16 @@
     - name: Manage Dotfiles with Stow
       tags: dotfiles
       block:
+        - name: Check if dotfiles directory exists
+          ansible.builtin.stat:
+            path: "{{ dotfiles_dir }}"
+          register: dotfiles_dir
         - name: Checkout dotfiles git repo
           ansible.builtin.git:
             repo: git@github.com:timlau/dotfiles.git
             dest: "{{ dotfiles_dir }}"
             version: HEAD
+          when: not dotfiles_dir.stat.exists
         - name: Use Stow to create symlinks
           ansible.builtin.shell:
             cmd: "make stow-all"
